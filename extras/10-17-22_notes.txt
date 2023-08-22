@@ -1,0 +1,66 @@
+sql notes 10/17/2022
+
+midterms by 5 pm today (10/17/2022)
+- just informational
+
+FIRST NORMAL FORM (1NF):
+-everything is broken down into smallest form
+
+-* A table is referred to as being in its First Normal Form if atomicity of the table is 1.
+	Here, atomicity states that a single cell cannot hold multiple values.
+	It must hold only a single-valued attribute
+	
+DEF:
+- Atomicity - means that multiple operations can be grouped into a single logical entity, that is,
+ other threads of control accessing the database will either see all of the changes or none of the changes.
+
+SECONT NORMAL FORM (2NF):
+-needs to be in first normal form
+-has to have primary key
+
+-* Second Normal Form (2NF) is based on the concept of full functional dependency.
+	Second Normal Form applies to relations with composite keys, that is, relations with a primary key composed of two or more attributes.
+	A relation with a single-attribute primary key is automatically in at least 2N 
+	
+DEF:
+- composite key -  in SQL can be defined as a combination of multiple columns,
+	and these columns are used to identify all the rows that are involved uniquely.
+	Even though a single column can't identify any row uniquely,
+	a combination of over one column can uniquely identify any record.
+	
+- primary key -  is a single field or combination of fields that uniquely defines a record.
+	None of the fields that are part of the primary key can contain a NULL value.
+	A table can have only one primary key. You use either the CREATE TABLE statement
+	or the ALTER TABLE statement to create a primary key in SQL.
+
+THIRD NORMAL FORM (3NF):
+-needs to follow second normal form
+-every non prime field must be dependant on primary key
+-edgar cod
+
+-* A given relation is said to be in its third normal form when it's in 2NF but has no transitive partial dependency.
+	Meaning, when no transitive dependency exists for the attributes that are non-prime, then the relation can be said to be in 3NF.
+	
+DEF:
+- Transitive dependency - in a database is an indirect relationship between values in the same table that causes a functional dependency.
+	By nature, a transitive dependency requires three or more attributes. To achieve the normalization standard of Third Normal Form (3NF),
+	any transitive dependency must be eliminated
+	
+	
+FINAL PROJECT:
+*code(required)*
+-needs 5 tables
+-needs 2 triggers (stored procedure that happens when data changes)
+-at least 2 views
+-4 stored procedures (creating/inserting, updating, deleting records)
+
+*design (not required)*
+-5 primary tables & 5 supporting tables (relationship tables, lookup tables, etc..)
+
+*misc*
+-topic
+-can be used in future class' projects
+
+
+
+

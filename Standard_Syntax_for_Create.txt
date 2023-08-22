@@ -1,0 +1,159 @@
+/*
+	FILE:	Standard_Syntax_for_Create.sql
+	AUTHOR:	Bob Trapp
+	DESCRIPTION:
+		The following show basic syntax for the common CREATE statements used
+		when creating new database items.
+*/
+
+
+-- *****************************************************************************
+-- Creating a new database
+-- Use a database name that makes sense but is unlikely to conflict with other
+-- databases on the same system.
+DROP DATABASE IF EXISTS <database name>;
+CREATE DATABASE <database name>;
+USE  <database name>;
+
+
+
+-- *****************************************************************************
+-- Creating a table
+-- When picking a table name, it should be the name of the entity represented
+-- and should make sense.  
+-- By convention, table names should be singular unless there is a good reason
+-- to use plural phrases.
+-- Be consistent in how you form table names or your database will appear to be
+-- poorly constructed!
+DROP TABLE IF EXISTS <table name>;
+CREATE TABLE <table name> (
+	field_1 <data type> [NULL | NOT NULL] [PRIMARY KEY [AUTO INCREMENT]] COMMENT '<field_1 description>'
+	, field_2 <data type> [NULL | NOT NULL] COMMENT '<field_2 description>'
+	.
+	.
+	.
+	, field_n <data type> [NULL | NOT NULL] COMMENT '<field_n description>'
+	-- if composite key or just want to specify PRIMARY KEY at the bottom
+	-- Use either this version, or the one above, but not both!
+	, PRIMARY KEY(<key field 1> [,<key field 2>[, ...]]) 
+	-- For each foreign key, add a line like this one.
+	-- Note, the referenced table must already exist.  If it is being created
+	-- by this script, the CREATE for that table must happen before the CREATE
+	-- for this table.
+	-- Also note: the fields DO NOT need to have the same name!  It is normal 
+	-- for the names to be the same, but not required by the DBMS.
+	, FOREIGN KEY(<field name) REFERENCES <other table name>(<field name>)
+	-- This is an alternate for for FOREIGN KEYs that provide more flexibility
+	-- See https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html
+	, CONSTRAINT <constraint name> FOREIGN KEY (<field name>)
+		REFERENCES <other table name>(<field name>)
+		ON DELETE [CASCADE | SET NULL | RESTRICT | NO ACTION | SET DEFAULT]
+		ON UPDATE [CASCADE | SET NULL | RESTRICT | NO ACTION | SET DEFAULT]
+) COMMENT '<table description>'
+;
+
+-- *****************************************************************************
+-- Creating an index
+-- See https://dev.mysql.com/doc/refman/5.7/en/create-index.html
+CREATE INDEX <index name>
+ON <table name>(<index column> [, <other index column> [, ...]])
+;
+
+-- *****************************************************************************
+-- Create a View
+CREATE OR REPLACE VIEW <database name>.<view name>
+AS
+<select statment>
+;
+
+
+-- *****************************************************************************
+-- Create a Stored Procedure
+-- NOTE: you have to change the delimiter from semicolon ";" to something that
+-- doesn't appear in the procedure body so MySQL will know where the CREATE 
+-- statement ends.  Remember to set it back to semicolon when the CREATE is over
+-- 
+-- By convention, MySQL stored procedure names begin with "sp_".  This is 
+-- different from SQL Server where "sp_" is reserved for system procedures.  In
+-- that case, use something different.  At Kirkwood,we often used "ksp_".
+DELIMITER $$
+DROP PROCEDURE IF EXISTS <procedure name>$$
+CREATE PROCEDURE <procedure name>(
+	-- By convention, parameter names in MySQL start with "p_".
+	-- In SQL Server, they start with "@".  Other DBMSs will have their 
+	-- own rules and conventions.
+	[IN | OUT | INOUT] <parameter name> <data type>
+	[, [IN | OUT | INOUT] <parameter name> <data type> [, ...]]
+)
+COMMENT '<procedure description>'
+BEGIN 
+--	DEFINE VARIABLES AND CONSTANTS
+--  Remember: all the DECLARE statements must be done before you do any of the
+--  SET statements!
+-- 	DECLARE var_variable_name DATA_TYPE;
+   
+-- *****************************************************************************
+--	DEFINE ERROR CONDITIONS
+--	NOTE: In this class, we won't really dig into this part of the stored 
+--	procedure logic
+
+-- *****************************************************************************
+--	CHECK for valid values
+    
+-- *****************************************************************************
+-- Primary Logic
+	
+END $$
+DELIMITER ; 
+
+
+-- *****************************************************************************
+-- Create a Function
+-- Remember, a function should return a single value
+-- Also remember, a function cannot INSERT, UPDATE, or DELETE
+--
+-- By convertion, MySQL function names begin with "fn_".
+DELIMITER $$
+DROP FUNCTION IF EXISTS <function name>;
+CREATE FUNCTION <function name> (
+	-- By convention, parameter names in MySQL start with "p_".
+	-- In SQL Server, they start with "@".  Other DBMSs will have their 
+	-- own rules and conventions.
+	[IN | OUT | INOUT] <parameter name> <data type>
+	[, [IN | OUT | INOUT] <parameter name> <data type> [, ...]]
+)
+RETURNS <data type>
+[NOT] DETERMINISTIC
+COMMENT '<function description>'
+BEGIN
+	-- Body logic
+	RETURN <return value>;
+END $$
+DELIMTER ;
+
+/*
+	SELECT <function name>(<argument list>) AS 'Field_Name';
+*/
+
+
+-- *****************************************************************************
+-- Create Trigger
+-- By convention, trigger names begin with "tr_".
+-- NOTE: Triggers do not support COMMENTs.  However, if you place comments
+-- insed the body using /* */ or //, those comments will be stored as part
+-- of the defition
+DELIMITER $$
+DROP TRIGGER IF EXISTS <trigger name>$$
+CREATE TRIGGER <trigger name> [BEFORE | AFTER] [INSERT | UPDATE | DELETE]
+FOR EACH ROW
+BEGIN
+	--	Trigger body
+END $$
+DELIMITER ;
+
+-- *****************************************************************************
+
+
+-- *****************************************************************************
+--                              END OF SCRIPT
+-- *****************************************************************************

@@ -1,0 +1,21 @@
+USE database_name;
+DELIMITER $$
+DROP PROCEDURE IF EXISTS <procedure name>$$
+CREATE PROCEDURE <procedure name>()
+COMMENT 'Briefly describe the procedure here.'
+BEGIN
+/*
+Copyright statement
+Author: Ryan Paradee
+File: the file name
+DESCRIPTION:
+A more detailed description of the procedure here.
+Modification History
+Date modified - Who did it - what was modified
+202X-MM-DD Ryan Paradee Initial Creation
+Kirkwood Community College, Business and Information Technology 3
+*/
+-- Put your code here
+END$$
+DELIMITER ;
+CALL <procedure name>();
